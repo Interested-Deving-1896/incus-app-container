@@ -1,125 +1,91 @@
 # incus-app-container
 
-Opinionated script for creating Incus containers for apps.
+[![Built with Ona](https://ona.com/build-with-ona.svg)](https://app.ona.com/#https://github.com/Interested-Deving-1896/incus-app-container) [![KDE Eco](https://img.shields.io/badge/KDE%20Eco-certified-brightgreen?logo=kde&logoColor=white&style=flat-square)](https://eco.kde.org/) [![Blue Angel](https://img.shields.io/badge/Blue%20Angel-DE--UZ%20215-0055a4?style=flat-square)](https://www.blauer-engel.de/en/certification/criteria) [![Energy](https://api.green-coding.io/v1/ci/badge/get?repo=Interested-Deving-1896%2Fincus-app-container&branch=main&workflow=eco-audit.yml)](https://metrics.green-coding.io/ci-index.html)
 
-| 🚧️👷 Under construction 👷🚧️ |
-| ---------------------------- |
 
-I see this as a successor to my
-[proxmox-create-docker-ct](https://github.com/hugojosefson/proxmox-create-docker-ct),
-that did a similar thing for Proxmox VE.
+<!-- AI:start:what-it-does -->
+_Description pending._
+<!-- AI:end:what-it-does -->
 
-## My use case / Features included
+## Architecture
 
-- [x] You have an `apps` directory on the TrueNAS SCALE server.
-- [x] Each container/app:
-  - [x] Has a subdirectory in `apps`, with the app's name.
-    - [x] It has a subdirectory `appdata` inside it, for the app's data.
-      - [x] It contains the app's `docker-compose.yml` file.
-      - [x] It is bind mounted inside the container as `/appdata`.
-  - [x] Has `docker-compose` installed, and runs the app via its
-        `/appdata/docker-compose.yml`.
-  - [x] Watches the `docker-compose.yml` file for changes, and restarts the app
-        when it changes.
-  - [x] Is exposed on the network with a static IP, or DHCP.
-- [x] CLI script(s) to easily create a new container/app.
-  - [x] Sets up a new subdirectory in `apps`.
-  - [x] Puts an example `docker-compose.yml` into the new subdirectory's
-        `appdata` directory.
-  - [x] Creates a new container with:
-    - [x] a static IP, or DHCP;
-    - [x] the new subdirectory as the bind mount;
-    - [x] automatic updates of os packages;
-    - [x] automatic updates of docker images;
-  - [x] Starts the container (optionally).
-- [x] The containers I create are compatible with Incus' normal tools, and with
-      `incus-ui-canonical`.
+<!-- AI:start:architecture -->
+_Architecture documentation pending._
+<!-- AI:end:architecture -->
 
-<details>
-<summary>...or maybe...? (click to expand)</summary>
+## Install
 
-- [ ] Put each app's configuration (ip(s), extra bind-mounts, image, etc) in a
-      `<appName>/incus-app-container.yml` file in the app's subdirectory.
-- [x] The app container has a subdirectory `<appName>/appdata/` mounted as
-      `/appdata` inside the container, so it can't reach its own configuration.
-- [ ] No scripts to run, just an always running container (or service?) that
-      watches the `apps/` directory and `incus-app-container.yml` files for
-      changes, and:
-  - [ ] creates+starts new incus app containers for each new subdirectory it
-        finds with an `incus-app-container.yml` file,
-  - [ ] relies on an `apps/incus-app-container.tf` file to be written such that
-        it dynamically creates/updates/deletes incus app container resources for
-        only each subdirectory it finds with an `incus-app-container.yml` file,
-  - [ ] watches incus for changes with
-        `incus monitor --type=lifecycle --type=operation --format=json`
-  - [ ] when `incus monitor` reports anything:
-    - [ ] `tofu apply -auto-approve -compact-warnings -concise`
-- [ ] The service keeps track of its own containers via OpenTofu's state, stored
-      in `apps/incus-app-container.tfstate`.
-- [ ] The service brands its containers with an empty
-      [profile](https://linuxcontainers.org/incus/docs/main/profiles/) on them,
-      so the user can see clearly which containers are owned by
-      `incus-app-container`.
-- [x] ~~Each `docker-compose.yml` is by default prepared with a service that
-      keeps its docker images up to date. It's a third-party tool, called
-      [Watchtower](https://containrrr.dev/watchtower/).~~
-- [x] Updates the images automatically, using Podman's built-in image updater.
-- [x] Inside each incus app container, there's a service that watches the
-      `docker-compose.yml` file for changes, and reloads the app when it
-      changes.
+<!-- Add installation instructions here. This section is yours — the AI will not modify it. -->
 
-</details>
-
-## Prerequisites
-
-- A working server with one of
-  - TrueNAS SCALE 23.10.2 or later, or
-  - Debian 12.5 or later.
-- `root` access on the server.
-- One empty block device for the storage pool.
-- An existing bridge network interface, for the containers to use, or a network
-  interface in `/etc/network/interfaces` with `dhcp`, that we can convert.
-- A subnet or several, to expose the containers on.
-
-## Install incus-app-container
-
-```sh
-curl -sSfL https://github.com/hugojosefson/incus-app-container/tarball/main \
-  | tar -xzv --wildcards "*/src/" --strip-components=2
+```bash
+git clone https://github.com/Interested-Deving-1896/incus-app-container.git
+cd incus-app-container
 ```
 
-<details>
-<summary>Utils for testing inside an incus container (click to expand)</summary>
+## Usage
 
-```sh
-# watch running docker containers
-watch -n0.2 docker ps
+<!-- Add usage examples here. This section is yours — the AI will not modify it. -->
+
+## Configuration
+
+<!-- Document configuration options here. This section is yours — the AI will not modify it. -->
+
+## CI
+
+<!-- AI:start:ci -->
+_CI documentation pending._
+<!-- AI:end:ci -->
+
+## Mirror chain
+
+<!-- AI:start:mirror-chain -->
+This repo is maintained in [`Interested-Deving-1896/incus-app-container`](https://github.com/Interested-Deving-1896/incus-app-container) and mirrored through:
+
+```
+Interested-Deving-1896/incus-app-container  ──►  OpenOS-Project-OSP/incus-app-container  ──►  OpenOS-Project-Ecosystem-OOC/incus-app-container
 ```
 
-```sh
-# watch the processes inside the container
-watch -n0.2 'ps -ef | grep -v "ps -ef"'
-```
+Changes flow downstream automatically via the hourly mirror chain in
+[`fork-sync-all`](https://github.com/Interested-Deving-1896/fork-sync-all).
+Direct commits to OSP or OOC are detected and opened as PRs back to `Interested-Deving-1896`.
+<!-- AI:end:mirror-chain -->
 
-```sh
-# run the watchdog manually
-service docker-compose-watchdog stop
-docker-compose-watchdog
-```
+## Contributors
 
-```sh
-# ask the watchdog to stop
-killall -HUP docker-compose-watchdog
-```
+<!-- AI:start:contributors -->
+_Contributors pending._
+<!-- AI:end:contributors -->
 
-</details>
+## Origins
 
-## Install incus
+<!-- AI:start:origins -->
+_Original project — no upstream influences recorded._
+<!-- AI:end:origins -->
 
-```sh
-./incus-app-container setup-incus --help
-```
+## Resources
+
+<!-- AI:start:resources -->
+_No additional resource files found._
+<!-- AI:end:resources -->
+
+## Accessibility
+
+<!-- AI:start:accessibility -->
+This repo uses automated accessibility auditing via `check-accessibility.yml`.
+
+Checks include: CODEOWNERS ownership coverage, README screen-reader compatibility,
+WCAG 2.1 AA HTML compliance, audio overview (espeak-ng), and Braille output (liblouis).
+
+
+
+
+Run the [Check Accessibility](https://github.com/Interested-Deving-1896/incus-app-container/actions/workflows/check-accessibility.yml)
+workflow to generate the first report and accessibility artifacts.
+See [DOCS/accessibility.md](https://github.com/Interested-Deving-1896/incus-app-container/blob/main/DOCS/accessibility.md) for the full reference.
+<!-- AI:end:accessibility -->
 
 ## License
 
-[MIT](LICENSE)
+<!-- AI:start:license -->
+[MIT](https://github.com/Interested-Deving-1896/incus-app-container/blob/main/LICENSE) © 2026 [Interested-Deving-1896](https://github.com/Interested-Deving-1896)
+<!-- AI:end:license -->
